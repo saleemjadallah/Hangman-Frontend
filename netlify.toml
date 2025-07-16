@@ -53,13 +53,13 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Compression for JS files
+# Cache control for JS files
 [[headers]]
   for = "*.js"
   [headers.values]
-    Content-Encoding = "gzip"
+    Cache-Control = "public, max-age=3600"
 
-# Build processing optimization
+# Build processing optimization - disable JS minification to prevent encoding issues
 [build.processing]
   skip_processing = false
 
@@ -67,10 +67,10 @@
   minify = true
 
 [build.processing.js]
-  minify = true
+  minify = false
 
 [build.processing.html]
-  minify = true
+  minify = false
 
 [build.processing.images]
   compress = true

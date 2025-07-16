@@ -1,16 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-  -->
   <base href="/">
 
   <meta charset="UTF-8">
@@ -65,15 +55,6 @@
   </style>
   
   <script>
-    // Error handling
-    window.addEventListener('error', function(e) {
-      console.error('Global error:', e.error);
-      var errorDiv = document.createElement('div');
-      errorDiv.style.cssText = 'position:fixed;top:10px;right:10px;background:red;color:white;padding:10px;z-index:10000;max-width:400px;';
-      errorDiv.textContent = 'Error: ' + e.error.message;
-      document.body.appendChild(errorDiv);
-    });
-    
     // Remove loader when Flutter is ready
     window.addEventListener('flutter-first-frame', function () {
       var loader = document.getElementById('loading');
@@ -81,9 +62,6 @@
         loader.remove();
       }
     });
-    
-    // Add console logging
-    console.log('Index.html loaded');
   </script>
 </head>
 <body>
@@ -92,79 +70,22 @@
     <div class="loader"></div>
   </div>
   
-  <!-- This script installs service_worker.js to provide PWA functionality to
-       application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <!-- Load Flutter directly without service worker -->
   <script>
-    var serviceWorkerVersion = null;
     var scriptLoaded = false;
     function loadMainDartJs() {
       if (scriptLoaded) {
         return;
       }
       scriptLoaded = true;
-      console.log('Loading main.dart.js');
       var scriptTag = document.createElement('script');
       scriptTag.src = 'main.dart.js';
       scriptTag.type = 'application/javascript';
-      scriptTag.onerror = function() {
-        console.error('Failed to load main.dart.js');
-      };
-      scriptTag.onload = function() {
-        console.log('main.dart.js loaded successfully');
-      };
-      document.body.append(scriptTag);
+      document.body.appendChild(scriptTag);
     }
-
-    if ('serviceWorker' in navigator) {
-      // Service workers are supported. Use them.
-      window.addEventListener('load', function () {
-        // Wait for registration to finish before dropping the <script> tag.
-        // Otherwise, the browser will load the script multiple times,
-        // potentially different versions.
-        var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
-        navigator.serviceWorker.register(serviceWorkerUrl)
-          .then((reg) => {
-            function waitForActivation(serviceWorker) {
-              serviceWorker.addEventListener('statechange', () => {
-                if (serviceWorker.state == 'activated') {
-                  console.log('Installed new service worker.');
-                  loadMainDartJs();
-                }
-              });
-            }
-            if (!reg.active && (reg.installing || reg.waiting)) {
-              // No active web worker and we have installed or are installing
-              // one for the first time. Simply wait for it to activate.
-              waitForActivation(reg.installing || reg.waiting);
-            } else if (!reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
-              // When the app updates the serviceWorkerVersion changes, so we
-              // need to ask the service worker to update.
-              console.log('New service worker available.');
-              reg.update();
-              waitForActivation(reg.installing);
-            } else {
-              // Existing service worker is still good.
-              console.log('Loading app from service worker.');
-              loadMainDartJs();
-            }
-          });
-
-        // If service worker doesn't succeed in a reasonable amount of time,
-        // fallback to plain <script> tag.
-        setTimeout(() => {
-          if (!scriptLoaded) {
-            console.warn(
-              'Failed to load app from service worker. Falling back to plain <script> tag.',
-            );
-            loadMainDartJs();
-          }
-        }, 4000);
-      });
-    } else {
-      // Service workers not supported. Just drop the <script> tag.
-      loadMainDartJs();
-    }
+    
+    // Load immediately
+    loadMainDartJs();
   </script>
 </body>
 </html>
