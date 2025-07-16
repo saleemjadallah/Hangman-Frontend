@@ -1,19 +1,31 @@
 [build]
-  # Build command for Flutter web
-  command = "git clone https://github.com/flutter/flutter.git -b stable --depth 1 && export PATH=\"$PWD/flutter/bin:$PATH\" && flutter config --enable-web && flutter pub get && flutter build web --release --web-renderer html --no-tree-shake-icons"
+  # Build command for Flutter web - includes full setup
+  command = """
+    echo "🚀 Starting Flutter web build..." &&
+    git clone https://github.com/flutter/flutter.git -b stable --depth 1 flutter &&
+    export PATH="$PWD/flutter/bin:$PATH" &&
+    flutter doctor -v &&
+    flutter config --enable-web &&
+    flutter pub get &&
+    flutter build web --release --web-renderer html --no-tree-shake-icons --base-href /
+  """
   
   # Directory containing the built files
   publish = "build/web"
+  
+  # Skip dependency installation phase
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF"
 
 [build.environment]
   # Flutter installation
   FLUTTER_VERSION = "3.5.0"
-  FLUTTER_ROOT = "/opt/build/flutter"
-  PATH = "/opt/build/flutter/bin:/usr/local/bin:/usr/bin:/bin"
+  NODE_VERSION = "18"
+  
+  # Skip Ruby/Python dependency checks
+  NETLIFY_USE_YARN = "false"
   
   # Flutter storage optimization
   PUB_CACHE = "/opt/build/cache/.pub-cache"
-  FLUTTER_STORAGE_BASE_URL = "https://storage.flutter-io.cn"
 
 # Handle SPA routing - CRITICAL for Flutter web
 [[redirects]]
