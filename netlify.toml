@@ -4,9 +4,6 @@
   
   # Directory containing the built files
   publish = "build/web"
-  
-  # Environment variables for build
-  environment = { FLUTTER_VERSION = "3.5.0" }
 
 [build.environment]
   # Flutter installation
