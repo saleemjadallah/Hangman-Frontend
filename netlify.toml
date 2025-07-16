@@ -1,6 +1,6 @@
 [build]
   # Build command for Flutter web - all on one line
-  command = "echo 'Starting Flutter web build...' && ([ ! -d flutter ] && git clone https://github.com/flutter/flutter.git -b stable --depth 1 flutter || echo 'Flutter already exists') && export PATH=\"$PWD/flutter/bin:$PATH\" && flutter config --enable-web && flutter pub get && flutter build web --web-renderer html --release"
+  command = "echo 'Starting Flutter web build...' && ([ ! -d flutter ] && git clone https://github.com/flutter/flutter.git -b stable --depth 1 flutter || echo 'Flutter already exists') && export PATH=\"$PWD/flutter/bin:$PATH\" && flutter config --enable-web && flutter pub get && flutter build web --release"
   
   # Directory containing the built files
   publish = "build/web"
