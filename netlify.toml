@@ -1,6 +1,6 @@
 [build]
   # Build command for Flutter web - all on one line
-  command = "echo 'Starting Flutter web build...' && git clone https://github.com/flutter/flutter.git -b stable --depth 1 flutter && export PATH=\"$PWD/flutter/bin:$PATH\" && flutter doctor -v && flutter config --enable-web && flutter pub get && flutter build web --release --no-tree-shake-icons --base-href /"
+  command = "echo 'Starting Flutter web build...' && git clone https://github.com/flutter/flutter.git -b stable --depth 1 flutter && export PATH=\"$PWD/flutter/bin:$PATH\" && flutter doctor -v && flutter config --enable-web && flutter pub get && flutter build web --release --verbose --base-href /"
   
   # Directory containing the built files
   publish = "build/web"
