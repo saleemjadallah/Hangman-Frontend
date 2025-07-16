@@ -1,18 +1,57 @@
 [build]
-  command = "chmod +x build.sh && ./build.sh"
+  # Build command for Flutter web
+  command = "git clone https://github.com/flutter/flutter.git -b stable --depth 1 && export PATH=\"$PWD/flutter/bin:$PATH\" && flutter config --enable-web && flutter pub get && flutter build web --release --web-renderer html --no-tree-shake-icons"
+  
+  # Directory containing the built files
   publish = "build/web"
+  
+  # Environment variables for build
+  environment = { FLUTTER_VERSION = "3.5.0" }
 
 [build.environment]
-  FLUTTER_VERSION = "3.19.0"
+  # Flutter installation
+  FLUTTER_VERSION = "3.5.0"
+  FLUTTER_ROOT = "/opt/build/flutter"
+  PATH = "/opt/build/flutter/bin:/usr/local/bin:/usr/bin:/bin"
+  
+  # Flutter storage optimization
+  PUB_CACHE = "/opt/build/cache/.pub-cache"
+  FLUTTER_STORAGE_BASE_URL = "https://storage.flutter-io.cn"
 
+# Handle SPA routing - CRITICAL for Flutter web
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-[context.production.environment]
-  FLUTTER_VERSION = "3.19.0"
+# API proxy (if needed in future)
+[[redirects]]
+  from = "/api/*"
+  to = "https://your-backend.com/api/:splat"
+  status = 200
+  force = true
 
+# Headers for performance and security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Compression for JS files
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Content-Encoding = "gzip"
+
+# Build processing optimization
 [build.processing]
   skip_processing = false
 

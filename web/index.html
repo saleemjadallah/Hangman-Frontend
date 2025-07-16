@@ -31,8 +31,17 @@
 
   <title>snarky_hangman</title>
   <link rel="manifest" href="manifest.json">
+  
+  <!-- Flutter configuration -->
+  <script>
+    window.flutterConfiguration = {
+      canvasKitBaseUrl: "/canvaskit/",
+      usePathUrlStrategy: true  // For clean URLs
+    };
+  </script>
 </head>
 <body>
+  <!-- Flutter bootstrap -->
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

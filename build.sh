@@ -1,43 +1,23 @@
 #!/bin/bash
 set -e
 
-echo "Starting Flutter installation..."
-echo "Current directory: $(pwd)"
-echo "Build base: $NETLIFY_BUILD_BASE"
+echo "📦 Installing Flutter SDK..."
+git clone https://github.com/flutter/flutter.git -b stable --depth 1 /opt/build/flutter
+export PATH="/opt/build/flutter/bin:$PATH"
 
-# Check if wget is available, if not use curl
-if command -v wget &> /dev/null; then
-    echo "Using wget to download Flutter..."
-    cd /tmp
-    wget -O flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.19.0-stable.tar.xz
-else
-    echo "Using curl to download Flutter..."
-    cd /tmp
-    curl -L -o flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.19.0-stable.tar.xz
-fi
+echo "🔧 Flutter Doctor..."
+flutter doctor -v
 
-echo "Extracting Flutter..."
-tar xf flutter.tar.xz
+echo "📱 Configuring Flutter for web..."
+flutter config --enable-web
 
-# Add Flutter to PATH
-export PATH="/tmp/flutter/bin:$PATH"
-
-# Return to project directory
-cd "$NETLIFY_BUILD_BASE"
-
-# Verify Flutter installation
-echo "Verifying Flutter installation..."
-flutter --version
-
-# Enable web support
-flutter config --enable-web --no-analytics
-
-# Get dependencies
-echo "Installing dependencies..."
+echo "📥 Getting dependencies..."
 flutter pub get
 
-# Build the web app
-echo "Building web app..."
-flutter build web --release
+echo "🏗️ Building for production..."
+flutter build web --release \
+  --web-renderer html \
+  --no-tree-shake-icons \
+  --base-href /
 
-echo "Build complete!"
+echo "✅ Build complete!"
