@@ -1,5 +1,13 @@
 [build]
-  command = "./build.sh"
+  command = """
+    cd /opt/build
+    git clone https://github.com/flutter/flutter.git -b stable
+    export PATH="/opt/build/flutter/bin:$PATH"
+    cd /opt/build/repo
+    flutter --version
+    flutter pub get
+    flutter build web --release
+  """
   publish = "build/web"
 
 [build.environment]
